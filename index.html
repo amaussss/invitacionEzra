@@ -28,28 +28,24 @@
       box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
     }
 
-    /* Efecto Parallax / Ventana estilo Adobe Express */
-    .parallax-section {
+    /* Marco unificado con zoom para TODAS las secciones */
+    .img-frame {
       width: 100%;
-      height: 90vh; /* Altura del marco visible */
-      background-attachment: fixed; /* Mantiene la imagen fija mientras se hace scroll */
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover;
+      height: 70vh; /* Altura estándar tipo ventana para todas las imágenes */
+      overflow: hidden;
+      position: relative;
+      background-color: #000000;
     }
 
-    /* Ajuste para teléfonos móviles (donde background-attachment: fixed suele tener limitaciones) */
-    @supports (-webkit-touch-callout: none) {
-      .parallax-section {
-        background-attachment: scroll;
-      }
-    }
-
-    /* Imagen normal adaptable */
-    .section-img {
+    .zoom-img {
       width: 100%;
-      height: auto;
+      height: 100%;
+      object-fit: cover; /* Ajusta e iguala la escala de todas las fotos */
+      object-position: center;
       display: block;
+      transform: scale(1);
+      transition: transform 0.15s linear; /* Movimiento fluido durante el scroll */
+      will-change: transform;
     }
 
     /* Botón flotante para la música */
@@ -99,27 +95,46 @@
 <body>
 
   <div class="page-container">
-    <!-- Bloque 1: Portada -->
-    <img class="section-img" src="imagen_ (1).jpg" alt="Portada Ezra">
+    <!-- Todas las fotos envueltas en la misma estructura con zoom uniforme -->
+    <div class="img-frame">
+      <img class="zoom-img" src="imagen_ (1).jpg" alt="1">
+    </div>
 
-    <!-- Bloque 2: Efecto Parallax / Ventana -->
-    <div class="parallax-section" style="background-image: url('imagen_ (2).jpg');"></div>
+    <div class="img-frame">
+      <img class="zoom-img" src="imagen_ (2).jpg" alt="2">
+    </div>
 
-    <!-- Bloques restantes -->
-    <img class="section-img" src="imagen_ (3).jpg" alt="Detalles 3">
-    <div class="parallax-section" style="background-image: url('imagen_ (4).jpg');"></div>
-    <img class="section-img" src="imagen_ (5).jpg" alt="Detalles 5">
-    <div class="parallax-section" style="background-image: url('imagen_ (6).jpg');"></div>
-    <img class="section-img" src="imagen_ (7).jpg" alt="Detalles 7">
-    <img class="section-img" src="imagen_ (8).jpg" alt="Ubicación y Horarios">
+    <div class="img-frame">
+      <img class="zoom-img" src="imagen_ (3).jpg" alt="3">
+    </div>
 
-    <!-- Confirmación WhatsApp -->
+    <div class="img-frame">
+      <img class="zoom-img" src="imagen_ (4).jpg" alt="4">
+    </div>
+
+    <div class="img-frame">
+      <img class="zoom-img" src="imagen_ (5).jpg" alt="5">
+    </div>
+
+    <div class="img-frame">
+      <img class="zoom-img" src="imagen_ (6).jpg" alt="6">
+    </div>
+
+    <div class="img-frame">
+      <img class="zoom-img" src="imagen_ (7).jpg" alt="7">
+    </div>
+
+    <div class="img-frame">
+      <img class="zoom-img" src="imagen_ (8).jpg" alt="8">
+    </div>
+
+    <!-- Botón de Confirmación por WhatsApp -->
     <a class="whatsapp-btn" href="https://wa.me/524646462058?text=Confirmo%20mi%20asistencia" target="_blank" rel="noopener noreferrer">
       Confirmar asistencia por WhatsApp
     </a>
   </div>
 
-  <!-- Reproductor de Audio -->
+  <!-- Reproductor de Audio Oculto -->
   <audio id="bg-music" loop preload="auto">
     <source src="audio.mp3" type="audio/mpeg">
     Tu navegador no soporta el elemento de audio.
@@ -139,6 +154,7 @@
 
     let isPlaying = false;
 
+    // Reproducción de sonido
     function playAudio() {
       if (!isPlaying) {
         audio.play().then(() => {
@@ -146,7 +162,7 @@
           musicIcon.textContent = '⏸️';
           musicText.textContent = 'Pausar Música';
         }).catch(err => {
-          console.log("Esperando interacción del usuario...");
+          console.log("Esperando interacción para audio...");
         });
       }
     }
@@ -173,6 +189,30 @@
         playAudio();
       }
     });
+
+    // Efecto de zoom progresivo para TODAS las imágenes conforme se scrollea
+    const zoomImages = document.querySelectorAll('.zoom-img');
+
+    function applyScrollZoom() {
+      const windowHeight = window.innerHeight;
+
+      zoomImages.forEach(img => {
+        const rect = img.parentElement.getBoundingClientRect();
+        
+        // Si la imagen entra en el campo de visión
+        if (rect.top < windowHeight && rect.bottom > 0) {
+          // Calcula el porcentaje visible (de 0 a 1)
+          const progress = (windowHeight - rect.top) / (windowHeight + rect.height);
+          // Zoom progresivo entre 1.0 (tamaño normal) y 1.25 (zoom máximo)
+          const scaleValue = 1 + Math.min(Math.max(progress * 0.25, 0), 0.25);
+          img.style.transform = `scale(${scaleValue})`;
+        }
+      });
+    }
+
+    window.addEventListener('scroll', applyScrollZoom);
+    window.addEventListener('resize', applyScrollZoom);
+    applyScrollZoom(); // Inicializar al cargar
   </script>
 </body>
 </html>
