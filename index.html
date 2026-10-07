@@ -26,49 +26,36 @@
       max-width: 600px;
       background: #000000;
       box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
-      position: relative;
+      display: flex;
+      flex-direction: column;
     }
 
-    /* Secciones contenedoras aisladas (para que ninguna imagen se quede fija al fondo) */
-    .section-block {
+    /* Contenedor de cada imagen */
+    .img-block {
       width: 100%;
-      position: relative;
-      background-color: #000000;
       overflow: hidden;
+      background-color: #000000;
+      position: relative;
     }
 
-    /* 1. Bloques de scroll normal (imágenes completas) */
-    .block-normal img {
+    /* Imagen con animación focal estilo Adobe Express */
+    .express-img {
       width: 100%;
       height: auto;
       display: block;
+      opacity: 0.3;
+      transform: scale(1.18);
+      transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease-out;
+      will-change: transform, opacity;
     }
 
-    /* 2. Bloques con transición reveladora tipo ventana (Sticky Focal) */
-    .block-reveal {
-      height: 80vh;
-      clip-path: inset(0 0 0 0);
+    /* Estado activo al entrar en pantalla (Zoom Reveal) */
+    .express-img.is-visible {
+      opacity: 1;
+      transform: scale(1);
     }
 
-    .block-reveal .sticky-wrap {
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .block-reveal img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-      display: block;
-    }
-
-    /* Botón flotante de música */
+    /* Botón flotante para la música */
     .audio-control-btn {
       position: fixed;
       bottom: 24px;
@@ -95,7 +82,7 @@
       background: #ffffff;
     }
 
-    /* Botón de WhatsApp */
+    /* Enlace de WhatsApp estilo botón */
     .whatsapp-btn {
       display: block;
       width: 85%;
@@ -109,8 +96,6 @@
       border-radius: 10px;
       font-size: 16px;
       box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
-      position: relative;
-      z-index: 10;
     }
   </style>
 </head>
@@ -118,59 +103,45 @@
 
   <div class="page-container">
     
-    <!-- Imagen 1: Normal -->
-    <div class="section-block block-normal">
-      <img src="imagen_ (1).jpg" alt="1">
+    <div class="img-block">
+      <img class="express-img" src="imagen_ (1).jpg" alt="1">
     </div>
 
-    <!-- Imagen 2: Transición Ventana -->
-    <div class="section-block block-reveal">
-      <div class="sticky-wrap">
-        <img src="imagen_ (2).jpg" alt="2">
-      </div>
+    <div class="img-block">
+      <img class="express-img" src="imagen_ (2).jpg" alt="2">
     </div>
 
-    <!-- Imagen 3: Normal -->
-    <div class="section-block block-normal">
-      <img src="imagen_ (3).jpg" alt="3">
+    <div class="img-block">
+      <img class="express-img" src="imagen_ (3).jpg" alt="3">
     </div>
 
-    <!-- Imagen 4: Transición Ventana -->
-    <div class="section-block block-reveal">
-      <div class="sticky-wrap">
-        <img src="imagen_ (4).jpg" alt="4">
-      </div>
+    <div class="img-block">
+      <img class="express-img" src="imagen_ (4).jpg" alt="4">
     </div>
 
-    <!-- Imagen 5: Normal -->
-    <div class="section-block block-normal">
-      <img src="imagen_ (5).jpg" alt="5">
+    <div class="img-block">
+      <img class="express-img" src="imagen_ (5).jpg" alt="5">
     </div>
 
-    <!-- Imagen 6: Transición Ventana -->
-    <div class="section-block block-reveal">
-      <div class="sticky-wrap">
-        <img src="imagen_ (6).jpg" alt="6">
-      </div>
+    <div class="img-block">
+      <img class="express-img" src="imagen_ (6).jpg" alt="6">
     </div>
 
-    <!-- Imagen 7: Normal -->
-    <div class="section-block block-normal">
-      <img src="imagen_ (7).jpg" alt="7">
+    <div class="img-block">
+      <img class="express-img" src="imagen_ (7).jpg" alt="7">
     </div>
 
-    <!-- Imagen 8: Normal -->
-    <div class="section-block block-normal">
-      <img src="imagen_ (8).jpg" alt="8">
+    <div class="img-block">
+      <img class="express-img" src="imagen_ (8).jpg" alt="8">
     </div>
 
-    <!-- Botón WhatsApp -->
+    <!-- Botón de Confirmación por WhatsApp -->
     <a class="whatsapp-btn" href="https://wa.me/524646462058?text=Confirmo%20mi%20asistencia" target="_blank" rel="noopener noreferrer">
       Confirmar asistencia por WhatsApp
     </a>
   </div>
 
-  <!-- Audio -->
+  <!-- Reproductor de Audio -->
   <audio id="bg-music" loop preload="auto">
     <source src="audio.mp3" type="audio/mpeg">
     Tu navegador no soporta el elemento de audio.
@@ -183,6 +154,7 @@
   </button>
 
   <script>
+    // Reproducción de sonido
     const audio = document.getElementById('bg-music');
     const toggleBtn = document.getElementById('music-toggle');
     const musicIcon = document.getElementById('music-icon');
@@ -224,6 +196,27 @@
         playAudio();
       }
     });
+
+    // Animación Focal de Zoom estilo Adobe Express
+    const images = document.querySelectorAll('.express-img');
+
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px 0px -10% 0px',
+      threshold: 0.15
+    };
+
+    const imageObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+        } else {
+          entry.target.classList.remove('is-visible');
+        }
+      });
+    }, observerOptions);
+
+    images.forEach(img => imageObserver.observe(img));
   </script>
 </body>
 </html>
