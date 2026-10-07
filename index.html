@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Invitación</title>
+  <title>Invitación - Ezra Cumple 3 Años</title>
   <style>
     * {
       box-sizing: border-box;
@@ -12,35 +12,44 @@
     }
 
     body {
-      background-color: #f7f7f7;
+      background-color: #000000;
       font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
       display: flex;
       flex-direction: column;
       align-items: center;
+      color: #ffffff;
       overflow-x: hidden;
     }
 
     .page-container {
       width: 100%;
-      max-width: 600px; /* Ancho optimizado para vista móvil */
-      background: #ffffff;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
+      max-width: 600px;
+      background: #000000;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
     }
 
-    /* Animación de entrada suave estilo Adobe Express */
+    /* Efecto Parallax / Ventana estilo Adobe Express */
+    .parallax-section {
+      width: 100%;
+      height: 90vh; /* Altura del marco visible */
+      background-attachment: fixed; /* Mantiene la imagen fija mientras se hace scroll */
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    /* Ajuste para teléfonos móviles (donde background-attachment: fixed suele tener limitaciones) */
+    @supports (-webkit-touch-callout: none) {
+      .parallax-section {
+        background-attachment: scroll;
+      }
+    }
+
+    /* Imagen normal adaptable */
     .section-img {
       width: 100%;
       height: auto;
       display: block;
-      opacity: 0;
-      transform: translateY(25px);
-      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-      will-change: opacity, transform;
-    }
-
-    .section-img.visible {
-      opacity: 1;
-      transform: translateY(0);
     }
 
     /* Botón flotante para la música */
@@ -53,7 +62,7 @@
       border: 1px solid #ddd;
       border-radius: 50px;
       padding: 12px 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -73,53 +82,50 @@
     /* Enlace de WhatsApp estilo botón */
     .whatsapp-btn {
       display: block;
-      width: 80%;
-      margin: 20px auto 40px auto;
-      padding: 14px;
+      width: 85%;
+      margin: 30px auto 50px auto;
+      padding: 16px;
       text-align: center;
       background-color: #25D366;
       color: #ffffff;
       text-decoration: none;
       font-weight: bold;
-      border-radius: 8px;
+      border-radius: 10px;
       font-size: 16px;
-      opacity: 0;
-      transform: translateY(25px);
-      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-    }
-
-    .whatsapp-btn.visible {
-      opacity: 1;
-      transform: translateY(0);
+      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
     }
   </style>
 </head>
 <body>
 
-  <!-- Contenedor principal de secciones -->
   <div class="page-container">
-    <img class="section-img" src="imagen_ (1).jpg" alt="1">
-    <img class="section-img" src="imagen_ (2).jpg" alt="2">
-    <img class="section-img" src="imagen_ (3).jpg" alt="3">
-    <img class="section-img" src="imagen_ (4).jpg" alt="4">
-    <img class="section-img" src="imagen_ (5).jpg" alt="5">
-    <img class="section-img" src="imagen_ (6).jpg" alt="6">
-    <img class="section-img" src="imagen_ (7).jpg" alt="7">
-    <img class="section-img" src="imagen_ (8).jpg" alt="8">
-    
-    <!-- Enlace directo para confirmar por WhatsApp -->
-    <a class="whatsapp-btn section-img" href="https://wa.me/524646462058?text=Confirmo%20mi%20asistencia" target="_blank" rel="noopener noreferrer">
+    <!-- Bloque 1: Portada -->
+    <img class="section-img" src="imagen_ (1).jpg" alt="Portada Ezra">
+
+    <!-- Bloque 2: Efecto Parallax / Ventana -->
+    <div class="parallax-section" style="background-image: url('imagen_ (2).jpg');"></div>
+
+    <!-- Bloques restantes -->
+    <img class="section-img" src="imagen_ (3).jpg" alt="Detalles 3">
+    <div class="parallax-section" style="background-image: url('imagen_ (4).jpg');"></div>
+    <img class="section-img" src="imagen_ (5).jpg" alt="Detalles 5">
+    <div class="parallax-section" style="background-image: url('imagen_ (6).jpg');"></div>
+    <img class="section-img" src="imagen_ (7).jpg" alt="Detalles 7">
+    <img class="section-img" src="imagen_ (8).jpg" alt="Ubicación y Horarios">
+
+    <!-- Confirmación WhatsApp -->
+    <a class="whatsapp-btn" href="https://wa.me/524646462058?text=Confirmo%20mi%20asistencia" target="_blank" rel="noopener noreferrer">
       Confirmar asistencia por WhatsApp
     </a>
   </div>
 
-  <!-- Reproductor de Audio Oculto -->
+  <!-- Reproductor de Audio -->
   <audio id="bg-music" loop preload="auto">
     <source src="audio.mp3" type="audio/mpeg">
     Tu navegador no soporta el elemento de audio.
   </audio>
 
-  <!-- Botón flotante interactivo -->
+  <!-- Botón flotante -->
   <button id="music-toggle" class="audio-control-btn">
     <span id="music-icon">🎵</span>
     <span id="music-text">Reproducir Música</span>
@@ -133,7 +139,6 @@
 
     let isPlaying = false;
 
-    // Función para reproducir el audio
     function playAudio() {
       if (!isPlaying) {
         audio.play().then(() => {
@@ -141,12 +146,11 @@
           musicIcon.textContent = '⏸️';
           musicText.textContent = 'Pausar Música';
         }).catch(err => {
-          console.log("Esperando interacción para reproducir sonido...");
+          console.log("Esperando interacción del usuario...");
         });
       }
     }
 
-    // Inicia el audio automáticamente al hacer el primer toque, clic o scroll en el teléfono
     function handleFirstUserInteraction() {
       playAudio();
       document.removeEventListener('click', handleFirstUserInteraction);
@@ -158,9 +162,8 @@
     document.addEventListener('touchstart', handleFirstUserInteraction);
     document.addEventListener('scroll', handleFirstUserInteraction);
 
-    // Botón manual para pausar/reproducir
     toggleBtn.addEventListener('click', (e) => {
-      e.stopPropagation(); // Evita interferir con el listener global
+      e.stopPropagation();
       if (isPlaying) {
         audio.pause();
         musicIcon.textContent = '🎵';
@@ -170,23 +173,6 @@
         playAudio();
       }
     });
-
-    // Transición de aparición suave al hacer scroll (Intersection Observer)
-    const elementsToAnimate = document.querySelectorAll('.section-img');
-    const observerOptions = {
-      threshold: 0.15
-    };
-
-    const observer = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          obs.unobserve(entry.target);
-        }
-      });
-    }, observerOptions);
-
-    elementsToAnimate.forEach(el => observer.observe(el));
   </script>
 </body>
 </html>
