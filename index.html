@@ -26,61 +26,49 @@
       max-width: 600px;
       background: #000000;
       box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
+      position: relative;
     }
 
-    /* Bloques Estándar (Scroll Normal) */
-    .block-normal {
+    /* Secciones contenedoras aisladas (para que ninguna imagen se quede fija al fondo) */
+    .section-block {
       width: 100%;
       position: relative;
-      z-index: 2;
       background-color: #000000;
+      overflow: hidden;
     }
 
+    /* 1. Bloques de scroll normal (imágenes completas) */
     .block-normal img {
       width: 100%;
       height: auto;
       display: block;
     }
 
-    /* Bloques Estilo Ventana Adobe Express (Parallax / Focal) */
-    .block-window {
+    /* 2. Bloques con transición reveladora tipo ventana (Sticky Focal) */
+    .block-reveal {
+      height: 80vh;
+      clip-path: inset(0 0 0 0);
+    }
+
+    .block-reveal .sticky-wrap {
+      position: sticky;
+      top: 0;
+      height: 100vh;
       width: 100%;
-      height: 75vh; /* Altura de la ventana que revela la foto */
-      position: relative;
-      z-index: 1;
-      overflow: hidden;
       display: flex;
       justify-content: center;
       align-items: center;
     }
 
-    .block-window img {
-      position: fixed;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
+    .block-reveal img {
       width: 100%;
-      max-width: 600px;
-      height: 100vh;
+      height: 100%;
       object-fit: cover;
       object-position: center;
-      z-index: -1;
-      pointer-events: none;
+      display: block;
     }
 
-    /* Fallback y optimización móvil para que el efecto paralaje no rompa la escala */
-    @supports (-webkit-touch-callout: none) {
-      .block-window {
-        clip-path: inset(0 0 0 0);
-      }
-      .block-window img {
-        position: absolute;
-        top: 0;
-        height: 100%;
-      }
-    }
-
-    /* Botón flotante para la música */
+    /* Botón flotante de música */
     .audio-control-btn {
       position: fixed;
       bottom: 24px;
@@ -107,7 +95,7 @@
       background: #ffffff;
     }
 
-    /* Enlace de WhatsApp estilo botón */
+    /* Botón de WhatsApp */
     .whatsapp-btn {
       display: block;
       width: 85%;
@@ -122,7 +110,7 @@
       font-size: 16px;
       box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
       position: relative;
-      z-index: 3;
+      z-index: 10;
     }
   </style>
 </head>
@@ -130,53 +118,59 @@
 
   <div class="page-container">
     
-    <!-- 1. Portada Principal (Normal) -->
-    <div class="block-normal">
+    <!-- Imagen 1: Normal -->
+    <div class="section-block block-normal">
       <img src="imagen_ (1).jpg" alt="1">
     </div>
 
-    <!-- 2. Transición Ventana Reveladora Estilo Adobe -->
-    <div class="block-window">
-      <img src="imagen_ (2).jpg" alt="2">
+    <!-- Imagen 2: Transición Ventana -->
+    <div class="section-block block-reveal">
+      <div class="sticky-wrap">
+        <img src="imagen_ (2).jpg" alt="2">
+      </div>
     </div>
 
-    <!-- 3. Bloque Normal -->
-    <div class="block-normal">
+    <!-- Imagen 3: Normal -->
+    <div class="section-block block-normal">
       <img src="imagen_ (3).jpg" alt="3">
     </div>
 
-    <!-- 4. Transición Ventana Reveladora -->
-    <div class="block-window">
-      <img src="imagen_ (4).jpg" alt="4">
+    <!-- Imagen 4: Transición Ventana -->
+    <div class="section-block block-reveal">
+      <div class="sticky-wrap">
+        <img src="imagen_ (4).jpg" alt="4">
+      </div>
     </div>
 
-    <!-- 5. Bloque Normal -->
-    <div class="block-normal">
+    <!-- Imagen 5: Normal -->
+    <div class="section-block block-normal">
       <img src="imagen_ (5).jpg" alt="5">
     </div>
 
-    <!-- 6. Transición Ventana Reveladora -->
-    <div class="block-window">
-      <img src="imagen_ (6).jpg" alt="6">
+    <!-- Imagen 6: Transición Ventana -->
+    <div class="section-block block-reveal">
+      <div class="sticky-wrap">
+        <img src="imagen_ (6).jpg" alt="6">
+      </div>
     </div>
 
-    <!-- 7. Bloque Normal -->
-    <div class="block-normal">
+    <!-- Imagen 7: Normal -->
+    <div class="section-block block-normal">
       <img src="imagen_ (7).jpg" alt="7">
     </div>
 
-    <!-- 8. Cierre y Ubicación (Normal) -->
-    <div class="block-normal">
+    <!-- Imagen 8: Normal -->
+    <div class="section-block block-normal">
       <img src="imagen_ (8).jpg" alt="8">
     </div>
 
-    <!-- Botón de Confirmación por WhatsApp -->
+    <!-- Botón WhatsApp -->
     <a class="whatsapp-btn" href="https://wa.me/524646462058?text=Confirmo%20mi%20asistencia" target="_blank" rel="noopener noreferrer">
       Confirmar asistencia por WhatsApp
     </a>
   </div>
 
-  <!-- Reproductor de Audio Oculto -->
+  <!-- Audio -->
   <audio id="bg-music" loop preload="auto">
     <source src="audio.mp3" type="audio/mpeg">
     Tu navegador no soporta el elemento de audio.
@@ -203,7 +197,7 @@
           musicIcon.textContent = '⏸️';
           musicText.textContent = 'Pausar Música';
         }).catch(err => {
-          console.log("Esperando interacción del usuario...");
+          console.log("Esperando interacción...");
         });
       }
     }
