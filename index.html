@@ -25,25 +25,59 @@
       width: 100%;
       max-width: 600px;
       background: #000000;
-      box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
     }
 
-    /* Contenedor que mantiene el formato original de la imagen sin recortar */
-    .img-box {
+    /* Bloques Estándar (Scroll Normal) */
+    .block-normal {
       width: 100%;
-      overflow: hidden;
-      display: block;
+      position: relative;
+      z-index: 2;
       background-color: #000000;
     }
 
-    /* Imagen completa con zoom progresivo suave */
-    .zoom-img {
+    .block-normal img {
       width: 100%;
       height: auto;
       display: block;
-      transform: scale(1);
-      transition: transform 0.1s cubic-bezier(0.25, 1, 0.5, 1);
-      will-change: transform;
+    }
+
+    /* Bloques Estilo Ventana Adobe Express (Parallax / Focal) */
+    .block-window {
+      width: 100%;
+      height: 75vh; /* Altura de la ventana que revela la foto */
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .block-window img {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 600px;
+      height: 100vh;
+      object-fit: cover;
+      object-position: center;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* Fallback y optimización móvil para que el efecto paralaje no rompa la escala */
+    @supports (-webkit-touch-callout: none) {
+      .block-window {
+        clip-path: inset(0 0 0 0);
+      }
+      .block-window img {
+        position: absolute;
+        top: 0;
+        height: 100%;
+      }
     }
 
     /* Botón flotante para la música */
@@ -56,7 +90,7 @@
       border: 1px solid #ddd;
       border-radius: 50px;
       padding: 12px 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -86,43 +120,54 @@
       font-weight: bold;
       border-radius: 10px;
       font-size: 16px;
-      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+      position: relative;
+      z-index: 3;
     }
   </style>
 </head>
 <body>
 
   <div class="page-container">
-    <div class="img-box">
-      <img class="zoom-img" src="imagen_ (1).jpg" alt="1">
+    
+    <!-- 1. Portada Principal (Normal) -->
+    <div class="block-normal">
+      <img src="imagen_ (1).jpg" alt="1">
     </div>
 
-    <div class="img-box">
-      <img class="zoom-img" src="imagen_ (2).jpg" alt="2">
+    <!-- 2. Transición Ventana Reveladora Estilo Adobe -->
+    <div class="block-window">
+      <img src="imagen_ (2).jpg" alt="2">
     </div>
 
-    <div class="img-box">
-      <img class="zoom-img" src="imagen_ (3).jpg" alt="3">
+    <!-- 3. Bloque Normal -->
+    <div class="block-normal">
+      <img src="imagen_ (3).jpg" alt="3">
     </div>
 
-    <div class="img-box">
-      <img class="zoom-img" src="imagen_ (4).jpg" alt="4">
+    <!-- 4. Transición Ventana Reveladora -->
+    <div class="block-window">
+      <img src="imagen_ (4).jpg" alt="4">
     </div>
 
-    <div class="img-box">
-      <img class="zoom-img" src="imagen_ (5).jpg" alt="5">
+    <!-- 5. Bloque Normal -->
+    <div class="block-normal">
+      <img src="imagen_ (5).jpg" alt="5">
     </div>
 
-    <div class="img-box">
-      <img class="zoom-img" src="imagen_ (6).jpg" alt="6">
+    <!-- 6. Transición Ventana Reveladora -->
+    <div class="block-window">
+      <img src="imagen_ (6).jpg" alt="6">
     </div>
 
-    <div class="img-box">
-      <img class="zoom-img" src="imagen_ (7).jpg" alt="7">
+    <!-- 7. Bloque Normal -->
+    <div class="block-normal">
+      <img src="imagen_ (7).jpg" alt="7">
     </div>
 
-    <div class="img-box">
-      <img class="zoom-img" src="imagen_ (8).jpg" alt="8">
+    <!-- 8. Cierre y Ubicación (Normal) -->
+    <div class="block-normal">
+      <img src="imagen_ (8).jpg" alt="8">
     </div>
 
     <!-- Botón de Confirmación por WhatsApp -->
@@ -131,7 +176,7 @@
     </a>
   </div>
 
-  <!-- Reproductor de Audio -->
+  <!-- Reproductor de Audio Oculto -->
   <audio id="bg-music" loop preload="auto">
     <source src="audio.mp3" type="audio/mpeg">
     Tu navegador no soporta el elemento de audio.
@@ -140,7 +185,7 @@
   <!-- Botón flotante -->
   <button id="music-toggle" class="audio-control-btn">
     <span id="music-icon">🎵</span>
-    <span id="music-text">Reproducir Música</span>
+    <span id="music-text">Pausar Música</span>
   </button>
 
   <script>
@@ -158,7 +203,7 @@
           musicIcon.textContent = '⏸️';
           musicText.textContent = 'Pausar Música';
         }).catch(err => {
-          console.log("Esperando interacción para reproducir sonido...");
+          console.log("Esperando interacción del usuario...");
         });
       }
     }
@@ -185,28 +230,6 @@
         playAudio();
       }
     });
-
-    // Zoom sutil progresivo conforme entra en pantalla
-    const zoomImages = document.querySelectorAll('.zoom-img');
-
-    function applyScrollZoom() {
-      const windowHeight = window.innerHeight;
-
-      zoomImages.forEach(img => {
-        const rect = img.getBoundingClientRect();
-        
-        if (rect.top < windowHeight && rect.bottom > 0) {
-          const progress = (windowHeight - rect.top) / (windowHeight + rect.height);
-          // Escala suave de 1.0 (tamaño real completo) a 1.08 (zoom ligero sin cortar detalles)
-          const scaleValue = 1 + Math.min(Math.max(progress * 0.08, 0), 0.08);
-          img.style.transform = `scale(${scaleValue})`;
-        }
-      });
-    }
-
-    window.addEventListener('scroll', applyScrollZoom);
-    window.addEventListener('resize', applyScrollZoom);
-    applyScrollZoom();
   </script>
 </body>
 </html>
