@@ -103,4 +103,90 @@
     <img class="section-img" src="imagen_ (3).jpg" alt="3">
     <img class="section-img" src="imagen_ (4).jpg" alt="4">
     <img class="section-img" src="imagen_ (5).jpg" alt="5">
-    <img class="section-img" src="imagen_
+    <img class="section-img" src="imagen_ (6).jpg" alt="6">
+    <img class="section-img" src="imagen_ (7).jpg" alt="7">
+    <img class="section-img" src="imagen_ (8).jpg" alt="8">
+    
+    <!-- Enlace directo para confirmar por WhatsApp -->
+    <a class="whatsapp-btn section-img" href="https://wa.me/524646462058?text=Confirmo%20mi%20asistencia" target="_blank" rel="noopener noreferrer">
+      Confirmar asistencia por WhatsApp
+    </a>
+  </div>
+
+  <!-- Reproductor de Audio Oculto -->
+  <audio id="bg-music" loop preload="auto">
+    <source src="audio.mp3" type="audio/mpeg">
+    Tu navegador no soporta el elemento de audio.
+  </audio>
+
+  <!-- Botón flotante interactivo -->
+  <button id="music-toggle" class="audio-control-btn">
+    <span id="music-icon">🎵</span>
+    <span id="music-text">Reproducir Música</span>
+  </button>
+
+  <script>
+    const audio = document.getElementById('bg-music');
+    const toggleBtn = document.getElementById('music-toggle');
+    const musicIcon = document.getElementById('music-icon');
+    const musicText = document.getElementById('music-text');
+
+    let isPlaying = false;
+
+    // Función para reproducir el audio
+    function playAudio() {
+      if (!isPlaying) {
+        audio.play().then(() => {
+          isPlaying = true;
+          musicIcon.textContent = '⏸️';
+          musicText.textContent = 'Pausar Música';
+        }).catch(err => {
+          console.log("Esperando interacción para reproducir sonido...");
+        });
+      }
+    }
+
+    // Inicia el audio automáticamente al hacer el primer toque, clic o scroll en el teléfono
+    function handleFirstUserInteraction() {
+      playAudio();
+      document.removeEventListener('click', handleFirstUserInteraction);
+      document.removeEventListener('touchstart', handleFirstUserInteraction);
+      document.removeEventListener('scroll', handleFirstUserInteraction);
+    }
+
+    document.addEventListener('click', handleFirstUserInteraction);
+    document.addEventListener('touchstart', handleFirstUserInteraction);
+    document.addEventListener('scroll', handleFirstUserInteraction);
+
+    // Botón manual para pausar/reproducir
+    toggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation(); // Evita interferir con el listener global
+      if (isPlaying) {
+        audio.pause();
+        musicIcon.textContent = '🎵';
+        musicText.textContent = 'Reproducir Música';
+        isPlaying = false;
+      } else {
+        playAudio();
+      }
+    });
+
+    // Transición de aparición suave al hacer scroll (Intersection Observer)
+    const elementsToAnimate = document.querySelectorAll('.section-img');
+    const observerOptions = {
+      threshold: 0.15
+    };
+
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    elementsToAnimate.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
