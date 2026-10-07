@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Invitación - Ezra Cumple 3 Años</title>
   <style>
     * {
@@ -11,48 +11,67 @@
       padding: 0;
     }
 
-    body {
+    html, body {
       background-color: #000000;
       font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      color: #ffffff;
+      overflow-x: hidden;
+      width: 100%;
+    }
+
+    body {
       display: flex;
       flex-direction: column;
       align-items: center;
-      color: #ffffff;
-      overflow-x: hidden;
     }
 
     .page-container {
       width: 100%;
       max-width: 600px;
       background: #000000;
-      box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* Contenedor de cada imagen */
-    .img-block {
-      width: 100%;
-      overflow: hidden;
-      background-color: #000000;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.9);
       position: relative;
     }
 
-    /* Imagen con animación focal estilo Adobe Express */
-    .express-img {
+    /* Cada sección es un bloque independiente apilado */
+    .section-card {
+      width: 100%;
+      position: relative;
+      background-color: #000000;
+      box-shadow: 0 -10px 30px rgba(0,0,0,0.8);
+    }
+
+    /* 1. Modo Normal: Las fotos completas (Portada, Ubicación, etc.) */
+    .mode-normal img {
       width: 100%;
       height: auto;
       display: block;
-      opacity: 0.3;
-      transform: scale(1.18);
-      transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease-out;
-      will-change: transform, opacity;
     }
 
-    /* Estado activo al entrar en pantalla (Zoom Reveal) */
-    .express-img.is-visible {
-      opacity: 1;
-      transform: scale(1);
+    /* 2. Modo Focal / Parallax Estilo Adobe Express */
+    .mode-focal {
+      height: 70vh; /* Altura de la ventana de revelado */
+      overflow: hidden;
+    }
+
+    .mode-focal .focal-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .mode-focal img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      transform: scale(1.05);
+      transition: transform 0.5s ease-out;
     }
 
     /* Botón flotante para la música */
@@ -60,42 +79,44 @@
       position: fixed;
       bottom: 24px;
       right: 24px;
-      z-index: 9999;
-      background: rgba(255, 255, 255, 0.9);
+      z-index: 99999;
+      background: rgba(255, 255, 255, 0.92);
       border: 1px solid #ddd;
       border-radius: 50px;
       padding: 12px 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 8px;
       font-size: 14px;
       font-weight: 600;
-      color: #333;
-      backdrop-filter: blur(6px);
-      transition: transform 0.2s ease, background 0.2s ease;
+      color: #222;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: transform 0.2s ease;
     }
 
     .audio-control-btn:hover {
       transform: scale(1.05);
-      background: #ffffff;
     }
 
     /* Enlace de WhatsApp estilo botón */
     .whatsapp-btn {
       display: block;
       width: 85%;
-      margin: 30px auto 50px auto;
-      padding: 16px;
+      margin: 40px auto 60px auto;
+      padding: 18px;
       text-align: center;
       background-color: #25D366;
       color: #ffffff;
       text-decoration: none;
       font-weight: bold;
-      border-radius: 10px;
+      border-radius: 12px;
       font-size: 16px;
-      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+      box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+      position: relative;
+      z-index: 100;
     }
   </style>
 </head>
@@ -103,48 +124,64 @@
 
   <div class="page-container">
     
-    <div class="img-block">
-      <img class="express-img" src="imagen_ (1).jpg" alt="1">
+    <!-- Imagen 1: Portada (Normal Completa) -->
+    <div class="section-card mode-normal" style="z-index: 1;">
+      <img src="imagen_ (1).jpg" alt="1">
     </div>
 
-    <div class="img-block">
-      <img class="express-img" src="imagen_ (2).jpg" alt="2">
+    <!-- Imagen 2: Efecto Focal / Ventana Reveladora Adobe -->
+    <div class="section-card mode-focal" style="z-index: 2;">
+      <div class="focal-sticky">
+        <img src="imagen_ (2).jpg" alt="2">
+      </div>
     </div>
 
-    <div class="img-block">
-      <img class="express-img" src="imagen_ (3).jpg" alt="3">
+    <!-- Imagen 3: Datos / Fecha (Normal Completa) -->
+    <div class="section-card mode-normal" style="z-index: 3;">
+      <img src="imagen_ (3).jpg" alt="3">
     </div>
 
-    <div class="img-block">
-      <img class="express-img" src="imagen_ (4).jpg" alt="4">
+    <!-- Imagen 4: Confirmación (Focal) -->
+    <div class="section-card mode-focal" style="z-index: 4;">
+      <div class="focal-sticky">
+        <img src="imagen_ (4).jpg" alt="4">
+      </div>
     </div>
 
-    <div class="img-block">
-      <img class="express-img" src="imagen_ (5).jpg" alt="5">
+    <!-- Imagen 5: Cartel Ezra 3 Años (Normal Completa) -->
+    <div class="section-card mode-normal" style="z-index: 5;">
+      <img src="imagen_ (5).jpg" alt="5">
     </div>
 
-    <div class="img-block">
-      <img class="express-img" src="imagen_ (6).jpg" alt="6">
+    <!-- Imagen 6: Bici Ezra (Focal) -->
+    <div class="section-card mode-focal" style="z-index: 6;">
+      <div class="focal-sticky">
+        <img src="imagen_ (6).jpg" alt="6">
+      </div>
     </div>
 
-    <div class="img-block">
-      <img class="express-img" src="imagen_ (7).jpg" alt="7">
+    <!-- Imagen 7: Papás / Padrinos (Normal Completa) -->
+    <div class="section-card mode-normal" style="z-index: 7;">
+      <img src="imagen_ (7).jpg" alt="7">
     </div>
 
-    <div class="img-block">
-      <img class="express-img" src="imagen_ (8).jpg" alt="8">
+    <!-- Imagen 8: Ubicación / Toro Loco (Normal Completa) -->
+    <div class="section-card mode-normal" style="z-index: 8;">
+      <img src="imagen_ (8).jpg" alt="8">
     </div>
 
-    <!-- Botón de Confirmación por WhatsApp -->
-    <a class="whatsapp-btn" href="https://wa.me/524646462058?text=Confirmo%20mi%20asistencia" target="_blank" rel="noopener noreferrer">
-      Confirmar asistencia por WhatsApp
-    </a>
+    <!-- Botón WhatsApp -->
+    <div class="section-card mode-normal" style="z-index: 9; background: #000;">
+      <a class="whatsapp-btn" href="https://wa.me/524646462058?text=Confirmo%20mi%20asistencia" target="_blank" rel="noopener noreferrer">
+        Confirmar asistencia por WhatsApp
+      </a>
+    </div>
+
   </div>
 
-  <!-- Reproductor de Audio -->
+  <!-- Audio -->
   <audio id="bg-music" loop preload="auto">
     <source src="audio.mp3" type="audio/mpeg">
-    Tu navegador no soporta el elemento de audio.
   </audio>
 
   <!-- Botón flotante -->
@@ -154,7 +191,6 @@
   </button>
 
   <script>
-    // Reproducción de sonido
     const audio = document.getElementById('bg-music');
     const toggleBtn = document.getElementById('music-toggle');
     const musicIcon = document.getElementById('music-icon');
@@ -168,9 +204,7 @@
           isPlaying = true;
           musicIcon.textContent = '⏸️';
           musicText.textContent = 'Pausar Música';
-        }).catch(err => {
-          console.log("Esperando interacción...");
-        });
+        }).catch(() => {});
       }
     }
 
@@ -196,27 +230,6 @@
         playAudio();
       }
     });
-
-    // Animación Focal de Zoom estilo Adobe Express
-    const images = document.querySelectorAll('.express-img');
-
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px 0px -10% 0px',
-      threshold: 0.15
-    };
-
-    const imageObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-        } else {
-          entry.target.classList.remove('is-visible');
-        }
-      });
-    }, observerOptions);
-
-    images.forEach(img => imageObserver.observe(img));
   </script>
 </body>
 </html>
