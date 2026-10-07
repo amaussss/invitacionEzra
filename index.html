@@ -28,23 +28,21 @@
       box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
     }
 
-    /* Marco unificado con zoom para TODAS las secciones */
-    .img-frame {
+    /* Contenedor que mantiene el formato original de la imagen sin recortar */
+    .img-box {
       width: 100%;
-      height: 70vh; /* Altura estándar tipo ventana para todas las imágenes */
       overflow: hidden;
-      position: relative;
+      display: block;
       background-color: #000000;
     }
 
+    /* Imagen completa con zoom progresivo suave */
     .zoom-img {
       width: 100%;
-      height: 100%;
-      object-fit: cover; /* Ajusta e iguala la escala de todas las fotos */
-      object-position: center;
+      height: auto;
       display: block;
       transform: scale(1);
-      transition: transform 0.15s linear; /* Movimiento fluido durante el scroll */
+      transition: transform 0.1s cubic-bezier(0.25, 1, 0.5, 1);
       will-change: transform;
     }
 
@@ -95,36 +93,35 @@
 <body>
 
   <div class="page-container">
-    <!-- Todas las fotos envueltas en la misma estructura con zoom uniforme -->
-    <div class="img-frame">
+    <div class="img-box">
       <img class="zoom-img" src="imagen_ (1).jpg" alt="1">
     </div>
 
-    <div class="img-frame">
+    <div class="img-box">
       <img class="zoom-img" src="imagen_ (2).jpg" alt="2">
     </div>
 
-    <div class="img-frame">
+    <div class="img-box">
       <img class="zoom-img" src="imagen_ (3).jpg" alt="3">
     </div>
 
-    <div class="img-frame">
+    <div class="img-box">
       <img class="zoom-img" src="imagen_ (4).jpg" alt="4">
     </div>
 
-    <div class="img-frame">
+    <div class="img-box">
       <img class="zoom-img" src="imagen_ (5).jpg" alt="5">
     </div>
 
-    <div class="img-frame">
+    <div class="img-box">
       <img class="zoom-img" src="imagen_ (6).jpg" alt="6">
     </div>
 
-    <div class="img-frame">
+    <div class="img-box">
       <img class="zoom-img" src="imagen_ (7).jpg" alt="7">
     </div>
 
-    <div class="img-frame">
+    <div class="img-box">
       <img class="zoom-img" src="imagen_ (8).jpg" alt="8">
     </div>
 
@@ -134,7 +131,7 @@
     </a>
   </div>
 
-  <!-- Reproductor de Audio Oculto -->
+  <!-- Reproductor de Audio -->
   <audio id="bg-music" loop preload="auto">
     <source src="audio.mp3" type="audio/mpeg">
     Tu navegador no soporta el elemento de audio.
@@ -154,7 +151,6 @@
 
     let isPlaying = false;
 
-    // Reproducción de sonido
     function playAudio() {
       if (!isPlaying) {
         audio.play().then(() => {
@@ -162,7 +158,7 @@
           musicIcon.textContent = '⏸️';
           musicText.textContent = 'Pausar Música';
         }).catch(err => {
-          console.log("Esperando interacción para audio...");
+          console.log("Esperando interacción para reproducir sonido...");
         });
       }
     }
@@ -190,21 +186,19 @@
       }
     });
 
-    // Efecto de zoom progresivo para TODAS las imágenes conforme se scrollea
+    // Zoom sutil progresivo conforme entra en pantalla
     const zoomImages = document.querySelectorAll('.zoom-img');
 
     function applyScrollZoom() {
       const windowHeight = window.innerHeight;
 
       zoomImages.forEach(img => {
-        const rect = img.parentElement.getBoundingClientRect();
+        const rect = img.getBoundingClientRect();
         
-        // Si la imagen entra en el campo de visión
         if (rect.top < windowHeight && rect.bottom > 0) {
-          // Calcula el porcentaje visible (de 0 a 1)
           const progress = (windowHeight - rect.top) / (windowHeight + rect.height);
-          // Zoom progresivo entre 1.0 (tamaño normal) y 1.25 (zoom máximo)
-          const scaleValue = 1 + Math.min(Math.max(progress * 0.25, 0), 0.25);
+          // Escala suave de 1.0 (tamaño real completo) a 1.08 (zoom ligero sin cortar detalles)
+          const scaleValue = 1 + Math.min(Math.max(progress * 0.08, 0), 0.08);
           img.style.transform = `scale(${scaleValue})`;
         }
       });
@@ -212,7 +206,7 @@
 
     window.addEventListener('scroll', applyScrollZoom);
     window.addEventListener('resize', applyScrollZoom);
-    applyScrollZoom(); // Inicializar al cargar
+    applyScrollZoom();
   </script>
 </body>
 </html>
