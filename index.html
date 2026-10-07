@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invitación</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #f7f7f7;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .page-container {
+      width: 100%;
+      max-width: 600px; /* Ancho optimizado para vista móvil/invitaciones */
+      background: #ffffff;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .section-img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Botón flotante para la música */
+    .audio-control-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9999;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid #ddd;
+      border-radius: 50px;
+      padding: 12px 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+      backdrop-filter: blur(6px);
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .audio-control-btn:hover {
+      transform: scale(1.05);
+      background: #ffffff;
+    }
+
+    /* Enlace de WhatsApp estilo botón */
+    .whatsapp-btn {
+      display: block;
+      width: 80%;
+      margin: 20px auto 40px auto;
+      padding: 14px;
+      text-align: center;
+      background-color: #25D366;
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Contenedor principal de secciones (Imágenes de tu invitación) -->
+  <div class="page-container">
+    <img class="section-img" src="imagen_1.jpg" alt="Portada">
+    <img class="section-img" src="imagen_2.jpg" alt="Detalles del evento">
+    <img class="section-img" src="imagen_3.jpg" alt="Ubicación y horarios">
+    
+    <!-- Enlace directo para confirmar por WhatsApp -->
+    <a class="whatsapp-btn" href="https://wa.me/524646462058?text=Confirmo%20mi%20asistencia" target="_blank" rel="noopener noreferrer">
+      Confirmar asistencia por WhatsApp
+    </a>
+  </div>
+
+  <!-- Reproductor de Audio Oculto -->
+  <audio id="bg-music" loop preload="auto">
+    <source src="tu-cancion.mp3" type="audio/mpeg">
+    Tu navegador no soporta el elemento de audio.
+  </audio>
+
+  <!-- Botón flotante interactivo -->
+  <button id="music-toggle" class="audio-control-btn">
+    <span id="music-icon">🎵</span>
+    <span id="music-text">Reproducir Música</span>
+  </button>
+
+  <script>
+    const audio = document.getElementById('bg-music');
+    const toggleBtn = document.getElementById('music-toggle');
+    const musicIcon = document.getElementById('music-icon');
+    const musicText = document.getElementById('music-text');
+
+    let isPlaying = false;
+
+    toggleBtn.addEventListener('click', () => {
+      if (isPlaying) {
+        audio.pause();
+        musicIcon.textContent = '🎵';
+        musicText.textContent = 'Reproducir Música';
+      } else {
+        audio.play().then(() => {
+          musicIcon.textContent = '⏸️';
+          musicText.textContent = 'Pausar Música';
+        }).catch(error => {
+          console.error("Error reproduciendo el audio:", error);
+        });
+      }
+      isPlaying = !isPlaying;
+    });
+  </script>
+</body>
+</html>
