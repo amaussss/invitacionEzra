@@ -17,19 +17,30 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      overflow-x: hidden;
     }
 
     .page-container {
       width: 100%;
-      max-width: 600px; /* Ancho optimizado para vista móvil/invitaciones */
+      max-width: 600px; /* Ancho optimizado para vista móvil */
       background: #ffffff;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
     }
 
+    /* Animación de entrada suave estilo Adobe Express */
     .section-img {
       width: 100%;
       height: auto;
       display: block;
+      opacity: 0;
+      transform: translateY(25px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+      will-change: opacity, transform;
+    }
+
+    .section-img.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     /* Botón flotante para la música */
@@ -72,63 +83,24 @@
       font-weight: bold;
       border-radius: 8px;
       font-size: 16px;
+      opacity: 0;
+      transform: translateY(25px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+
+    .whatsapp-btn.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
   </style>
 </head>
 <body>
 
-  <!-- Contenedor principal de secciones (Imágenes de tu invitación) -->
+  <!-- Contenedor principal de secciones -->
   <div class="page-container">
     <img class="section-img" src="imagen_ (1).jpg" alt="1">
     <img class="section-img" src="imagen_ (2).jpg" alt="2">
     <img class="section-img" src="imagen_ (3).jpg" alt="3">
     <img class="section-img" src="imagen_ (4).jpg" alt="4">
     <img class="section-img" src="imagen_ (5).jpg" alt="5">
-    <img class="section-img" src="imagen_ (6).jpg" alt="6">
-    <img class="section-img" src="imagen_ (7).jpg" alt="7">
-    <img class="section-img" src="imagen_ (8).jpg" alt="8">
-    
-    <!-- Enlace directo para confirmar por WhatsApp -->
-    <a class="whatsapp-btn" href="https://wa.me/524646462058?text=Confirmo%20mi%20asistencia" target="_blank" rel="noopener noreferrer">
-      Confirmar asistencia por WhatsApp
-    </a>
-  </div>
-
-  <!-- Reproductor de Audio Oculto -->
-  <audio id="bg-music" loop preload="auto">
-    <source src="audio.mp3" type="audio/mpeg">
-    Tu navegador no soporta el elemento de audio.
-  </audio>
-
-  <!-- Botón flotante interactivo -->
-  <button id="music-toggle" class="audio-control-btn">
-    <span id="music-icon">🎵</span>
-    <span id="music-text">Reproducir Música</span>
-  </button>
-
-  <script>
-    const audio = document.getElementById('bg-music');
-    const toggleBtn = document.getElementById('music-toggle');
-    const musicIcon = document.getElementById('music-icon');
-    const musicText = document.getElementById('music-text');
-
-    let isPlaying = false;
-
-    toggleBtn.addEventListener('click', () => {
-      if (isPlaying) {
-        audio.pause();
-        musicIcon.textContent = '🎵';
-        musicText.textContent = 'Reproducir Música';
-      } else {
-        audio.play().then(() => {
-          musicIcon.textContent = '⏸️';
-          musicText.textContent = 'Pausar Música';
-        }).catch(error => {
-          console.error("Error reproduciendo el audio:", error);
-        });
-      }
-      isPlaying = !isPlaying;
-    });
-  </script>
-</body>
-</html>
+    <img class="section-img" src="imagen_
